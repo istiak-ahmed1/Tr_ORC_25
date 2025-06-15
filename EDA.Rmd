@@ -1,0 +1,48 @@
+---
+title: "EDA"
+author: "**Istiak Ahmed**, *So*, *ASICT Division*"
+output: html_notebook
+---
+
+## Load the data
+```{r}
+library(readxl)
+rcbd1f <- read_excel("D:/Research_methodology/rcbd1f.xlsx")
+```
+
+```{r}
+dim(rcbd1f)
+```
+
+```{r}
+names(rcbd1f)
+```
+
+```{r}
+str(rcbd1f)
+```
+
+```{r}
+rcbd1f$Treat <- factor(rcbd1f$Treat)
+```
+
+```{r}
+str(rcbd1f)
+```
+
+```{r}
+table(rcbd1f$Treat)
+```
+
+```{r}
+library(AgroR)
+```
+
+```{r}
+desc(rcbd1f$Treat, rcbd1f$Yield, ylab = "Yield")
+```
+
+```{r}
+dispvar(rcbd1f[3:7])
+```
+

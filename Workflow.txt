@@ -1,0 +1,34 @@
+Basic R/ RStudio/ Rnotebook
+        | 
+       \|/
+Load Data
+        | 
+       \|/
+Inspect Data
+        | 
+       \|/
+Install and Load Packages
+        | 
+       \|/
+Exploratory Data Analysis (Descriptive/Heatmap/LinePlot etc.)
+        | 
+       \|/
+Design related analysis (CRD/RCBD etc.)
+        | 
+       \|/
+Correlation and Path analysis
+        | 
+       \|/
+Principal Component Analysis (PCA)
+        | 
+       \|/
+Cluster Analysis
+        | 
+       \|/
+Diallel Analysis
+        | 
+       \|/
+Line X Tester Analysis
+        | 
+       \|/
+Stability Analysis
