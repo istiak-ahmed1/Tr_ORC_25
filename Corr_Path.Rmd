@@ -1,0 +1,41 @@
+---
+title: "Correlation Plot and Path Analysis"
+author: "**Istiak Ahmed**, *SO, ASICT Division, BARI*"
+format: html
+editor: visual
+---
+
+## Correlation Analysis
+
+Load the Data
+
+```{r}
+library(readxl)
+data_corr <- read_excel("data_corr.xlsx")
+```
+
+```{r}
+library(AgroR)
+```
+
+```{r}
+corgraph(data_corr[4:10],axissize = 9, legendsize = 9, size.tile.lty = .3, size.label.cor = .3)
+```
+
+```{r}
+library(metan)
+```
+
+```{r}
+plot(corr_coef(data_corr[4:10]))
+```
+
+```{r}
+library(Path.Analysis)
+```
+
+```{r}
+corr_plot(data_corr[4:10])
+```
+
+## Path Analysis
