@@ -68,7 +68,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="Corr_Path_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Corr_Path_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Corr_Path_files/libs/bootstrap/bootstrap-1bc8a17f135ab3d594c857e9f48e611b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="Corr_Path_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
 
+<script src="Corr_Path_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="Corr_Path_files/libs/viz-1.8.2/viz.js"></script>
+
+<link href="Corr_Path_files/libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+
+<script src="Corr_Path_files/libs/grViz-binding-1.0.11/grViz.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -103,21 +142,519 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> Notebook. When you execute code within the notebook, the results appear beneath the code.</p>
-<p>Try executing this chunk by clicking the <em>Run</em> button within the chunk or by placing your cursor inside it and pressing <em>Ctrl+Shift+Enter</em>.</p>
+<section id="correlation-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-analysis">Correlation Analysis</h2>
+<p>Explain the relationship between variables of interest.</p>
+<p><span class="math display">\[
+r = \frac {N\sum{XY}-(\sum{X}\sum{Y})}{\sqrt{ [N\sum{x^2}-(\sum{x})^2 ][N\sum{y^2}-(\sum{y})^2 }]}
+\]</span></p>
+<p><img src="102121_pic1.webp" class="img-fluid"></p>
+<p><strong>Load the Data</strong></p>
+<p>Water stress is one of the major abiotic factors that limit crop production and quality. Seed priming is a pre-sowing treatment that enhances seed performance under stress conditions. The aim of this study was to investigate the effects of water stress and seed priming on grain yield (gy) and its components.The dataset comprises 2 factor variables and 9 response or observed variables, alongside a variable denoting the repetitions of each experimental unit. The initial three observed variables (aba, apx, and pod) provide insights into the activity of phytohormones. Additionally, the variable “ph” represents the height of the plants. Lastly, the remaining variables (til, pl, grp, tgw) fall under the</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data_corr <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data_corr.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AgroR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corgraph</span>(data_corr[<span class="dv">4</span><span class="sc">:</span><span class="dv">12</span>], <span class="at">axissize =</span> <span class="dv">9</span>, <span class="at">legendsize =</span> <span class="dv">9</span>, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">size.tile.lty =</span> .<span class="dv">3</span>, <span class="at">size.label.cor =</span> .<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Var1 Var2       cor            p
+2   apx  aba 0.9082634 1.885128e-07
+3   pod  aba 0.9198573 6.639678e-08
+4    ph  aba 0.5050025 3.255004e-02
+5   til  aba 0.8620740 4.233403e-06
+6    pl  aba 0.8482595 8.679504e-06
+7   grp  aba 0.8516903 7.311009e-06
+8   tgw  aba 0.8265283 2.355418e-05
+9    gy  aba 0.8743554 2.090292e-06
+12  pod  apx 0.9635150 1.407942e-10
+13   ph  apx 0.6368627 4.479637e-03
+14  til  apx 0.8718100 2.433675e-06
+15   pl  apx 0.8768522 1.794826e-06
+16  grp  apx 0.9388915 8.063656e-09
+17  tgw  apx 0.9096778 1.672404e-07
+18   gy  apx 0.8937468 5.824986e-07
+22   ph  pod 0.6177669 6.294679e-03
+23  til  pod 0.8921721 6.519037e-07
+24   pl  pod 0.8958134 5.011560e-07
+25  grp  pod 0.9188209 7.334027e-08
+26  tgw  pod 0.9039493 2.684990e-07
+27   gy  pod 0.8801494 1.460227e-06
+32  til   ph 0.4485499 6.189600e-02
+33   pl   ph 0.7413279 4.305720e-04
+34  grp   ph 0.6895023 1.546693e-03
+35  tgw   ph 0.7025639 1.148677e-03
+36   gy   ph 0.4910611 3.850802e-02
+42   pl  til 0.8063900 5.299770e-05
+43  grp  til 0.8831159 1.206573e-06
+44  tgw  til 0.8777484 1.697938e-06
+45   gy  til 0.8557440 5.936312e-06
+52  grp   pl 0.9463510 2.914297e-09
+53  tgw   pl 0.8667164 3.268688e-06
+54   gy   pl 0.7843962 1.163260e-04
+62  tgw  grp 0.9312724 2.014629e-08
+63   gy  grp 0.8607743 4.543751e-06
+72   gy  tgw 0.8516407 7.329368e-06</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Corr_Path_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Corr_Path_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Add a new chunk by clicking the <em>Insert Chunk</em> button on the toolbar or by pressing <em>Ctrl+Alt+I</em>.</p>
-<p>When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the <em>Preview</em> button or press <em>Ctrl+Shift+K</em> to preview the HTML file).</p>
-<p>The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(metan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'GGally':
+  method from   
+  +.gg   ggplot2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>|=========================================================|</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>| Multi-Environment Trial Analysis (metan) v1.19.0        |</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>| Author: Tiago Olivoto                                   |</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>| Type 'citation('metan')' to know how to cite metan      |</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>| Type 'vignette('metan_start')' for a short tutorial     |</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>| Visit 'https://bit.ly/metanpkg' for a complete tutorial |</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>|=========================================================|</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">corr_coef</span>(data_corr[<span class="dv">4</span><span class="sc">:</span><span class="dv">12</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Corr_Path_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Path.Analysis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'Path.Analysis'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:AgroR':
+
+    desc</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corr_plot</span>(data_corr[<span class="dv">4</span><span class="sc">:</span><span class="dv">12</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Corr_Path_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="key-observations" class="level3">
+<h3 class="anchored" data-anchor-id="key-observations"><strong>Key Observations:</strong></h3>
+<ol type="1">
+<li><p><strong>Strong Positive Correlations (≥ 0.85)</strong>:</p>
+<ul>
+<li><p><strong><code>aba</code> (Abscisic acid?)</strong> shows very strong associations with:</p>
+<ul>
+<li><strong><code>apx</code></strong> (0.91<em>), <strong><code>pod</code></strong> (0.92</em>), <strong><code>til</code></strong> (0.86<em>), <strong><code>pl</code></strong> (0.85</em>), <strong><code>grp</code></strong> (0.85<em>), <strong><code>tgw</code></strong> (0.83</em>), and <strong><code>gy</code></strong> (0.87**).</li>
+</ul></li>
+<li><p><strong><code>apx</code> (Antioxidant enzyme?)</strong> correlates highly with <strong><code>pod</code></strong> (0.96<em>), <strong><code>til</code></strong> (0.87</em>), <strong><code>pl</code></strong> (0.88<em>), <strong><code>grp</code></strong> (0.94</em>), <strong><code>tgw</code></strong> (0.91*), and <strong><code>gy</code></strong> (0.89**).</p></li>
+<li><p><strong><code>grp</code> (Grains per plant/pod?)</strong> is strongly linked to <strong><code>pl</code></strong> (0.95<em>), <strong><code>tgw</code></strong> (0.93</em>), and <strong><code>gy</code></strong> (0.86**).</p></li>
+</ul></li>
+<li><p><strong>Moderate Correlations (0.45–0.74)</strong>:</p>
+<ul>
+<li><strong><code>ph</code> (Plant height)</strong> has weaker but significant ties to other traits (e.g., 0.45* with <strong><code>til</code></strong>, 0.74* with <strong><code>pl</code></strong>).</li>
+</ul></li>
+<li><p><strong>Weakest Correlation</strong>:</p>
+<ul>
+<li><strong><code>ph</code></strong> and <strong><code>til</code></strong> (0.45*) show the lowest (but still significant) relationship.</li>
+</ul></li>
+<li><p><strong>Grain Yield (<code>gy</code>)</strong>:</p>
+<ul>
+<li>Highly correlated with most traits, especially <strong><code>grp</code></strong> (0.86<strong>), <code>tgw</code> (0.85</strong>), and <strong><code>til</code></strong> (0.86**).</li>
+</ul></li>
+<li><p><strong>Statistical Significance</strong>:</p>
+<ul>
+<li><strong><code>*</code></strong> = Significant at *p* &lt; 0.05; <strong><code>**</code></strong> = Highly significant at *p* &lt; 0.01.</li>
+</ul></li>
+</ol>
+</section>
+<section id="implications" class="level3">
+<h3 class="anchored" data-anchor-id="implications"><strong>Implications:</strong></h3>
+<ol type="1">
+<li><p><strong>Trait Prioritization for Breeding</strong>:</p>
+<ul>
+<li><p>Focus on <strong><code>grp</code></strong>, <strong><code>tgw</code></strong>, and <strong><code>til</code></strong> (strongest links to <strong><code>gy</code></strong>). For example:</p>
+<ul>
+<li><p>Higher <strong><code>grp</code></strong> (grains per pod/plant) and <strong><code>tgw</code></strong> (thousand-grain weight) likely drive yield.</p></li>
+<li><p><strong><code>til</code></strong> (tillers?) also strongly influences yield (0.86**).</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>Redundancy in Traits</strong>:</p>
+<ul>
+<li><strong><code>apx</code></strong>, <strong><code>pod</code></strong>, and <strong><code>aba</code></strong> are highly intercorrelated (0.91–0.96*). Measuring one may suffice to represent the group.</li>
+</ul></li>
+<li><p><strong>Plant Height (<code>ph</code>)</strong>:</p>
+<ul>
+<li>Less critical for yield (weakest correlations), but still contributes indirectly (e.g., via <strong><code>pl</code></strong> or <strong><code>til</code></strong>).</li>
+</ul></li>
+<li><p><strong>Biological Pathways</strong>:</p>
+<ul>
+<li>The strong <strong><code>aba</code></strong>-<strong><code>apx</code></strong>-<strong><code>pod</code></strong> cluster suggests stress-response traits (e.g., abscisic acid and antioxidants) are tightly linked to reproductive structures (<strong><code>pod</code></strong>) and yield.</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="path-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="path-analysis">Path Analysis</h2>
+<p>In the field of statistical analysis, <strong>Structural Equation Modeling (SEM)</strong> is a powerful tool used to analyze complex relationships between variables. It allows researchers to explore both direct and indirect effects among multiple variables simultaneously.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">matdiag</span>(data_corr[<span class="dv">4</span><span class="sc">:</span><span class="dv">12</span>], <span class="dv">9</span>, <span class="at">verbose =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Results of the path coefficient analysis: 
+$`Direct effect(s) matrix:`
+    Diret effect(s) t-test p(&gt;|t|) sig.
+aba          0.4019 0.7934  0.2192   ns
+apx          0.1672  1.111   0.141   ns
+pod          0.0989 0.1868   0.427   ns
+ph          -0.0859 0.0406  0.4841   ns
+til          0.0063 0.0068  0.4973   ns
+pl          -0.3563 0.4216  0.3393   ns
+grp           0.482 0.0946  0.4629   ns
+tgw          0.1927 0.2077   0.419   ns
+
+$`Direct(Diagonal) and indirect(off-diagonal) effect(s) matrix:`
+       aba    apx    pod      ph    til      pl    grp    tgw
+aba 0.4019 0.1519 0.0910 -0.0434 0.0054 -0.3022 0.4105 0.1593
+apx 0.3650 0.1672 0.0953 -0.0547 0.0055 -0.3124 0.4525 0.1753
+pod 0.3697 0.1611 0.0989 -0.0531 0.0056 -0.3192 0.4429 0.1742
+ph  0.2029 0.1065 0.0611 -0.0859 0.0028 -0.2641 0.3323 0.1354
+til 0.3464 0.1458 0.0883 -0.0385 0.0063 -0.2873 0.4257 0.1692
+pl  0.3409 0.1466 0.0886 -0.0637 0.0051 -0.3563 0.4561 0.1670
+grp 0.3423 0.1570 0.0909 -0.0593 0.0055 -0.3372 0.4820 0.1795
+tgw 0.3322 0.1521 0.0894 -0.0604 0.0055 -0.3088 0.4489 0.1927
+
+$`Residual effect:`
+       [,1]
+[1,] 0.3865</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="grViz html-widget html-fill-item" id="htmlwidget-c85cb08493504d72889d" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-c85cb08493504d72889d">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\",\n       label = \"Diagram of the Path Coefficient Analysis\",\n       labelloc = \"t\",\n       labeljust = \"c\",\n       fontname = \"Helvetica\",\n       fontcolor = \"gray30\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"gy\", shape = \"rectangle\", style = \"empty\", fontsize = \"12\", fixedsize = \"TRUE\", height = \"0.75\", width = \"1\", penwidth = \"1\", color = \"blue\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"aba\", shape = \"circle\", style = \"empty\", fontsize = \"12\", fixedsize = \"TRUE\", height = \"0.75\", width = \"1\", penwidth = \"1\", color = \"blue\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"apx\", shape = \"circle\", style = \"empty\", fontsize = \"12\", fixedsize = \"TRUE\", height = \"0.75\", width = \"1\", penwidth = \"1\", color = \"blue\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"pod\", shape = \"circle\", style = \"empty\", fontsize = \"12\", fixedsize = \"TRUE\", height = \"0.75\", width = \"1\", penwidth = \"1\", color = \"blue\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"ph\", shape = \"circle\", style = \"empty\", fontsize = \"12\", fixedsize = \"TRUE\", height = \"0.75\", width = \"1\", penwidth = \"1\", color = \"blue\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"6\" [label = \"til\", shape = \"circle\", style = \"empty\", fontsize = \"12\", fixedsize = \"TRUE\", height = \"0.75\", width = \"1\", penwidth = \"1\", color = \"blue\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"7\" [label = \"pl\", shape = \"circle\", style = \"empty\", fontsize = \"12\", fixedsize = \"TRUE\", height = \"0.75\", width = \"1\", penwidth = \"1\", color = \"blue\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"8\" [label = \"grp\", shape = \"circle\", style = \"empty\", fontsize = \"12\", fixedsize = \"TRUE\", height = \"0.75\", width = \"1\", penwidth = \"1\", color = \"blue\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"9\" [label = \"tgw\", shape = \"circle\", style = \"empty\", fontsize = \"12\", fixedsize = \"TRUE\", height = \"0.75\", width = \"1\", penwidth = \"1\", color = \"blue\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n\"1\"->\"1\" [label = \"0.3865 :Residual\", fontsize = \"10\", color = \"red\"] \n\"2\"->\"1\" [label = \"0.4019 ns\", fontsize = \"10\", color = \"red\"] \n\"3\"->\"1\" [label = \"0.1672 ns\", fontsize = \"10\", color = \"red\"] \n\"4\"->\"1\" [label = \"0.0989 ns\", fontsize = \"10\", color = \"red\"] \n\"5\"->\"1\" [label = \"-0.0859 ns\", fontsize = \"10\", color = \"red\"] \n\"6\"->\"1\" [label = \"0.0063 ns\", fontsize = \"10\", color = \"red\"] \n\"7\"->\"1\" [label = \"-0.3563 ns\", fontsize = \"10\", color = \"red\"] \n\"8\"->\"1\" [label = \"0.482 ns\", fontsize = \"10\", color = \"red\"] \n\"9\"->\"1\" [label = \"0.1927 ns\", fontsize = \"10\", color = \"red\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<section id="key-observations-1" class="level3">
+<h3 class="anchored" data-anchor-id="key-observations-1"><strong>Key Observations:</strong></h3>
+<ol type="1">
+<li><p><strong>Non-Significant (ns) Direct Effects</strong>:</p>
+<ul>
+<li><p>All path coefficients are marked as “ns” (non-significant), meaning <strong>none of the traits</strong> have statistically significant (*p* &lt; 0.05) <em>direct</em> effects on the target variable.</p></li>
+<li><p>Example paths:</p>
+<ul>
+<li><p><strong><code>til</code></strong> → Target: 0.0063 ns</p></li>
+<li><p><strong><code>ph</code></strong> → Target: 0.0089 ns</p></li>
+<li><p><strong><code>pod</code></strong> → Target: 0.0989 ns</p></li>
+<li><p><strong><code>apx</code></strong> → Target: 0.1927 ns</p></li>
+<li><p><strong><code>tgw</code></strong> → Target: 0.1672 ns</p></li>
+<li><p><strong><code>aba</code></strong> → Target: e-4019 (negligible).</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>Residual Effect (Unexplained Variance)</strong>:</p>
+<ul>
+<li><p><strong>0.3865 (38.65%)</strong>: Indicates that ~39% of the variation in the target variable is <strong>not explained</strong> by the included traits. This suggests:</p>
+<ul>
+<li><p>Missing key variables (e.g., environmental factors, management practices).</p></li>
+<li><p>Complex interactions (e.g., trait synergies) not captured by direct paths.</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>Notable (But Non-Significant) Paths</strong>:</p>
+<ul>
+<li><p><strong><code>apx</code></strong> (0.1927) and <strong><code>tgw</code></strong> (0.1672) show the strongest <em>numerical</em> (but non-significant) direct effects.</p></li>
+<li><p><strong><code>gp</code></strong> (e-3555) and <strong><code>aba</code></strong> (e-4019) have near-zero effects.</p></li>
+</ul></li>
+</ol>
+</section>
+<section id="implications-1" class="level3">
+<h3 class="anchored" data-anchor-id="implications-1"><strong>Implications:</strong></h3>
+<ol type="1">
+<li><p><strong>No Single Trait Directly Drives the Target</strong>:</p>
+<ul>
+<li><p>Unlike the earlier correlation table (where traits like <strong><code>grp</code></strong> and <strong><code>tgw</code></strong> strongly correlated with <strong><code>gy</code></strong>), this analysis shows <strong>no direct causal links</strong>.</p></li>
+<li><p>The discrepancy suggests traits influence the target <strong>indirectly</strong> (e.g., through intermediate variables like Biological Yield).</p></li>
+</ul></li>
+<li><p><strong>Need for Indirect Path Analysis</strong>:</p>
+<ul>
+<li><p>Use <strong>mediation analysis</strong> or <strong>structural equation modeling (SEM)</strong> to explore:</p>
+<ul>
+<li><p>If <strong><code>apx</code></strong> or <strong><code>tgw</code></strong> affect <strong><code>gy</code></strong> via other traits (e.g., <strong><code>pod</code></strong> or <strong><code>grp</code></strong>).</p></li>
+<li><p>Interactions between traits (e.g., <strong><code>til</code></strong> × <strong><code>ph</code></strong>).</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>High Residual Variance</strong>:</p>
+<ul>
+<li><p>Address by:</p>
+<ul>
+<li><p>Adding critical missing traits (e.g., root architecture, stress indices).</p></li>
+<li><p>Incorporating environmental data (e.g., rainfall, soil quality).</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>Contrast with Correlation Results</strong>:</p>
+<ul>
+<li>The earlier correlation table showed strong associations (e.g., <strong><code>grp</code></strong>–<strong><code>gy</code></strong> = 0.86**), but path analysis reveals these relationships may be <strong>mediated or confounded</strong>.</li>
+</ul></li>
+</ol>
+</section>
+<section id="conclusion-recommendations" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-recommendations"><strong>Conclusion &amp; Recommendations:</strong></h3>
+<ul>
+<li><p><strong>Breeding/Management</strong>: Focus on <strong>trait combinations</strong> (e.g., select for high <strong><code>tgw</code></strong> <em>and</em> <strong><code>apx</code></strong>) rather than individual traits.</p></li>
+<li><p><strong>Research Next Steps</strong>:</p>
+<ul>
+<li><p>Expand the model to include indirect paths and interactions.</p></li>
+<li><p>Validate findings with field trials or multi-environment data.</p></li>
+</ul></li>
+<li><p><strong>Statistical Caution</strong>: Non-significance may reflect small sample size or high variability—check statistical power.</p></li>
+</ul>
+<p><strong>Note</strong>: If <strong><code>gfp</code></strong> (possibly “grain filling period”) is the target, its residual variance (38.65%) highlights the need to explore physiological or climate-related drivers.</p>
+</section>
+</section>
+<section id="path-analysis-using-lavaan" class="level2">
+<h2 class="anchored" data-anchor-id="path-analysis-using-lavaan">Path Analysis using lavaan</h2>
+<section id="performing-sem" class="level3">
+<h3 class="anchored" data-anchor-id="performing-sem"><strong>Performing SEM</strong></h3>
+<section id="model-specification" class="level4">
+<h4 class="anchored" data-anchor-id="model-specification"><strong>Model Specification</strong></h4>
+<p>The first step in SEM is to specify the model. I used the lavaan package to write the model syntax. The model consisted of two latent variables (EA and YC) and one observed variable (gy). The latent variables were defined by their indicators using the&nbsp;<code>=~</code>&nbsp;operator. The observed variable was regressed on the latent variables using the&nbsp;<code>~</code>&nbsp;operator.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mod.id <span class="ot">&lt;-</span> <span class="st">'</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="st">EA =~ aba + apx + pod</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="st">YC =~ til + pl + grp + tgw</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="st">gy ~ EA + YC</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="model-estimation-and-identification" class="level4">
+<h4 class="anchored" data-anchor-id="model-estimation-and-identification"><strong>Model Estimation and Identification</strong></h4>
+<p>After specifying the model, we can proceed with estimating the parameters and identifying the model’s fit. The&nbsp;<code>lavaan</code>&nbsp;package is used for this purpose. The following code snippet performs model estimation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lavaan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is lavaan 0.6-19
+lavaan is FREE software! Please report any bugs.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lavaan'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:metan':
+
+    inspect, sem</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mod.est <span class="ot">&lt;-</span> <span class="fu">sem</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">model =</span> mod.id,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> data_corr</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: lavaan-&gt;lav_data_full():  
+   some observed variances are (at least) a factor 1000 times larger than 
+   others; use varTable(fit) to investigate</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod.est, <span class="at">fit.measures =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lavaan 0.6-19 ended normally after 85 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        18
+
+  Number of observations                            18
+
+Model Test User Model:
+                                                      
+  Test statistic                                23.193
+  Degrees of freedom                                18
+  P-value (Chi-square)                           0.183
+
+Model Test Baseline Model:
+
+  Test statistic                               278.306
+  Degrees of freedom                                28
+  P-value                                        0.000
+
+User Model versus Baseline Model:
+
+  Comparative Fit Index (CFI)                    0.979
+  Tucker-Lewis Index (TLI)                       0.968
+
+Loglikelihood and Information Criteria:
+
+  Loglikelihood user model (H0)               -258.507
+  Loglikelihood unrestricted model (H1)       -246.911
+                                                      
+  Akaike (AIC)                                 553.015
+  Bayesian (BIC)                               569.042
+  Sample-size adjusted Bayesian (SABIC)        513.733
+
+Root Mean Square Error of Approximation:
+
+  RMSEA                                          0.127
+  90 Percent confidence interval - lower         0.000
+  90 Percent confidence interval - upper         0.259
+  P-value H_0: RMSEA &lt;= 0.050                    0.223
+  P-value H_0: RMSEA &gt;= 0.080                    0.711
+
+Standardized Root Mean Square Residual:
+
+  SRMR                                           0.024
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  EA =~                                               
+    aba               1.000                           
+    apx               0.315    0.033    9.621    0.000
+    pod               1.102    0.117    9.385    0.000
+  YC =~                                               
+    til               1.000                           
+    pl                0.968    0.137    7.058    0.000
+    grp               6.103    0.742    8.230    0.000
+    tgw               1.060    0.151    7.006    0.000
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  gy ~                                                
+    EA                3.644    1.843    1.977    0.048
+    YC                0.082    1.034    0.080    0.937
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  EA ~~                                               
+    YC                6.341    2.359    2.689    0.007
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .aba               0.594    0.217    2.739    0.006
+   .apx               0.012    0.007    1.655    0.098
+   .pod               0.195    0.100    1.948    0.051
+   .til               2.748    0.974    2.822    0.005
+   .pl                1.287    0.492    2.619    0.009
+   .grp               9.552    8.392    1.138    0.255
+   .tgw               1.614    0.612    2.637    0.008
+   .gy               11.480    4.110    2.793    0.005
+    EA                3.767    1.443    2.611    0.009
+    YC               11.584    4.700    2.465    0.014</code></pre>
+</div>
+</div>
+<p>The&nbsp;<code>sem()</code>&nbsp;function estimates the parameters of the specified model using the provided data. The&nbsp;<code>summary()</code>&nbsp;function then provides a summary of the estimated model, including the estimated coefficients, standard errors, p-values, and fit indices.</p>
+<p>Additionally, you can obtain fit measures by modifying the code snippet as shown below. This will provide additional fit measures such as the Comparative Fit Index (CFI), Root Mean Square Error of Approximation (RMSEA), and others.</p>
+</section>
+</section>
+<section id="interpreting-model-results" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-model-results"><strong>Interpreting model results</strong></h3>
+<p><strong>Model Test:</strong></p>
+<p>The user model’s chi-square test statistic is 23.193 with 18 degrees of freedom, resulting in a p-value of 0.183. This indicates that the user model fits the data reasonably well, as a higher p-value suggests a better fit. The baseline model’s chi-square test statistic is 278.306 with 28 degrees of freedom and a p-value of 0.000. The significant difference between the user model and the baseline model suggests that the user model provides a better fit.</p>
+<p><strong>Fit Indices:</strong></p>
+<p>The Comparative Fit Index (CFI) is 0.979, indicating a good fit of the user model. A CFI value close to 1 indicates a better fit. The Tucker-Lewis Index (TLI) is 0.968, also indicating a good fit. Similar to CFI, TLI values close to 1 indicate a better fit.</p>
+<p><strong>Loglikelihood and Information Criteria:</strong></p>
+<p>The loglikelihood of the user model is -258.507, while the loglikelihood of the unrestricted model is -246.911. A higher loglikelihood indicates a better fit. Information criteria such as Akaike Information Criterion (AIC), Bayesian Information Criterion (BIC), and Sample-size adjusted Bayesian Information Criterion (SABIC) are provided as well. Lower values of these criteria indicate a better fit.</p>
+<p><strong>Root Mean Square Error of Approximation (RMSEA):</strong></p>
+<p>The RMSEA is 0.127, which suggests a reasonable fit of the model. The 90% confidence interval for RMSEA ranges from 0.000 to 0.259. A smaller RMSEA value and a narrower confidence interval indicate a better fit. However, the p-values for testing the null hypotheses regarding RMSEA are 0.223 and 0.711, indicating that the model does not significantly deviate from a perfect fit.</p>
+<p><strong>Standardized Root Mean Square Residual (SRMR):</strong></p>
+<p>The SRMR is 0.024, which is below the commonly accepted threshold of 0.08. This suggests a good fit of the model, as smaller values indicate better fit.</p>
+<p><strong>Parameter Estimates:</strong></p>
+<p>The parameter estimates provide information about the relationships between latent variables and observed variables. For example, the estimated regression coefficient of gy on EA is 3.644 with a standard error of 1.843 and a p-value of 0.048. Similarly, the regression coefficient of gy on YC is 0.082 with a standard error of 1.034 and a p-value of 0.937.</p>
+<p>The estimated covariation between EA and YC is 6.341 with a standard error of 2.359 and a p-value of 0.007. The variances of the latent variables and the observed variables are also provided. For example, the estimated variance of EA is 3.767 with a standard error of 1.443 and a p-value of 0.009.</p>
+<p>In summary, the SEM analysis results indicate that the user model fits the data reasonably well. The fit indices, loglikelihood, RMSEA, and SRMR suggest a good fit. The parameter estimates provide insights into the relationships between latent and observed variables in the model.</p>
+</section>
+<section id="path-diagram" class="level3">
+<h3 class="anchored" data-anchor-id="path-diagram"><strong>Path Diagram</strong></h3>
+<p>The final step was to visualize the model using a path diagram. I used the&nbsp;<code>semPlot</code>&nbsp;package to draw the path diagram with different options.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(semPlot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">semPaths</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">object =</span> mod.est,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">what =</span> <span class="st">"path"</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">whatLabels =</span> <span class="st">"par"</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Corr_Path_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This code snippet creates a basic path diagram displaying the paths between latent and observed variables. You can adjust the appearance of the path diagram by modifying various parameters like style, layout, rotation, size, and color.</p>
+<p>For example, the following code generates a path diagram in a tree layout:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">semPaths</span>(</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">object =</span> mod.est,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">what =</span> <span class="st">"path"</span>,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">whatLabels =</span> <span class="st">"par"</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"ram"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">layout =</span> <span class="st">"tree"</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">rotation =</span> <span class="dv">2</span>,</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">sizeMan =</span> <span class="dv">7</span>,</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">sizeLat =</span> <span class="dv">7</span>,</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">"lightblue"</span>,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">edge.label.cex =</span> <span class="fl">1.2</span>,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">label.cex =</span> <span class="fl">1.3</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Corr_Path_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-of-the-path-diagram" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation-of-the-path-diagram"><strong>Interpretation of the Path Diagram</strong></h3>
+<ul>
+<li><p>The path diagram provides a graphical representation of the SEM model. It distinguishes observed variables (enclosed in squares or rectangles) from latent variables (represented by circles or ellipses).</p></li>
+<li><p>The single-headed arrows, known as paths, indicate the causal relationships between variables. The variable at the tail of the arrow influences or causes the variable at the head. These paths help us understand how variables interact within the model.</p></li>
+<li><p>The double-headed arrows represent the covariance between variables. When two variables are connected by a double-headed arrow, it indicates that they share a common underlying factor or are directly related to each other. The double-headed arrows pointing to the same variable reflect the variances associated with that variable.</p></li>
+</ul>
+<p>However, in some cases, these variances may be omitted if the variables are standardized to have a unit variance. The path diagram visually represents the structural relationships, including causality, covariance, and variances, between the observed and latent variables in the SEM model.</p>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion"><strong>Conclusion</strong></h3>
+<p>This blog post provided a detailed explanation of implementing Structural Equation Modeling (SEM) in R. We covered the steps involved, including clearing the R environment, importing data, specifying the model, estimating parameters, and creating a path diagram. The path diagram serves as a valuable tool for visualizing and interpreting the relationships between variables in the SEM model. By leveraging SEM in R, researchers can gain deeper insights into complex relationships and make informed decisions based on their findings.</p>
+</section>
+</section>
 
 </main>
 <!-- /main column -->
