@@ -1,37 +1,79 @@
 ---
 title: "EDA"
-author: "**Istiak Ahmed**, *So*, *ASICT Division*"
-output: html_notebook
+author: "**Istiak Ahmed**, *SO, ASICT Division, BARI*"
+format: html
+editor: visual
 ---
 
 ## Load the data
+
+Water stress is one of the major abiotic factors that limit crop production and quality. Seed priming is a pre-sowing treatment that enhances seed performance under stress conditions. The aim of this study was to investigate the effects of water stress and seed priming on grain yield (gy) and its components.The dataset comprises 2 factor variables and 9 response or observed variables, alongside a variable denoting the repetitions of each experimental unit. The initial three observed variables (aba, apx, and pod) provide insights into the activity of phytohormones. Additionally, the variable “ph” represents the height of the plants. Lastly, the remaining variables (til, pl, grp, tgw) fall under the
+
 ```{r}
 library(readxl)
-rcbd1f <- read_excel("D:/Research_methodology/rcbd1f.xlsx")
+data_corr <- read_excel("data_corr.xlsx")
 ```
 
 ```{r}
-dim(rcbd1f)
+dim(data_corr)
 ```
 
 ```{r}
-names(rcbd1f)
+names(data_corr)
 ```
 
 ```{r}
-str(rcbd1f)
+str(data_corr)
 ```
 
 ```{r}
-rcbd1f$Treat <- factor(rcbd1f$Treat)
+data_corr$rep = factor(data_corr$rep)
+data_corr$water = factor(data_corr$water)
+data_corr$priming = factor(data_corr$priming)
 ```
 
 ```{r}
-str(rcbd1f)
+str(data_corr)
 ```
 
 ```{r}
-table(rcbd1f$Treat)
+table(data_corr$water, data_corr$priming)
+```
+
+## Graphical Representation of data
+
+```{r}
+library(ggplot2)
+```
+
+### Scatter plot
+
+```{r}
+ggplot(data_corr, aes(x=priming, y=gy,color=water)) +
+  geom_point(aes(shape = factor(water), size=1)) +
+  geom_text(label=data_corr$water,nudge_x = .25, nudge_y = 0.25,check_overlap = T) +
+  theme_classic() +
+  theme(legend.position = "none") 
+```
+
+### Bar plot
+
+```{r}
+ggplot(data_corr, aes(x=priming, y=gy, fill=water)) + 
+  geom_bar(stat = "identity",position=position_dodge2())+
+  xlab("Priming")+
+  ylab("Grain Yield")+
+  theme_bw()+theme(axis.text.x = element_text(angle = 45, vjust = .5),
+                   text = element_text(color="black",size = 14))
+```
+
+### Heatmap
+
+```{r}
+ggplot(data_corr, aes(priming, water, fill= gy)) + 
+  geom_tile()+ scale_fill_distiller(palette = "RdPu")+
+  geom_text(label=data_corr$gy,nudge_x = 0.25, nudge_y = 0.25,check_overlap = T)+
+  theme_bw()
 ```
 
 ```{r}
@@ -39,10 +81,9 @@ library(AgroR)
 ```
 
 ```{r}
-desc(rcbd1f$Treat, rcbd1f$Yield, ylab = "Yield")
+desc2fat(data_corr$water, data_corr$priming, data_corr$gy)
 ```
 
 ```{r}
-dispvar(rcbd1f[3:7])
+dispvar(data_corr[4:12])
 ```
-

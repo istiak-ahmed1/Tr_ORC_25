@@ -1,0 +1,62 @@
+---
+title: "Factorial RCBD"
+author: "**Istiak Ahmed**, *SO, ASICT Division, BARI*"
+format: html
+editor: visual
+---
+
+## Sketch the layout design
+
+```{r}
+library(AgroR)
+```
+
+```{r}
+sketch(trat=c("A","B"),
+       trat1=c("X","Y","Z"),
+       design = "FAT2DBC",
+       r=3)
+```
+
+## Download Data
+
+<https://tinyurl.com/mkjfzvn9>
+
+## Load the data
+
+```{r}
+library(readxl)
+data_corr <- read_excel("data_corr.xlsx")
+```
+
+```{r}
+data_corr$rep = factor(data_corr$rep)
+data_corr$water = factor(data_corr$water)
+data_corr$priming = factor(data_corr$priming)
+```
+
+## Analysis
+
+```{r}
+FAT2DBC(data_corr$water, data_corr$priming, data_corr$rep, data_corr$gy,
+        ylab = "Grain Yield", xlab = "Irrigation",
+        legend = "Priming", angle.label = 90)
+```
+
+```{r}
+FAT2DBC(data_corr$water, data_corr$priming, data_corr$rep, data_corr$apx,
+        ylab = "Grain Yield", xlab = "Irrigation",
+        legend = "Priming", angle.label = 90)
+```
+
+## Analysis using 'doebioresearch' package
+
+```{r}
+library(doebioresearch)
+```
+
+```{r}
+frbd2fact(data_corr[4:12], data_corr$rep, data_corr$water, data_corr$priming, 3)
+```
+
+## 
